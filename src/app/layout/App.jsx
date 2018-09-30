@@ -31,9 +31,7 @@ class App extends Component {
     return (
       <div>
         <AsyncModalManager />
-        <Switch>
-          <Route exact path="/" component={AsyncHomePage} />
-        </Switch>
+        <Route exact path="/" component={AsyncHomePage} />
         <Route
           exact
           path="/(.+)"
