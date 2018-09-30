@@ -13,18 +13,24 @@ const store = configureStore();
 const rootEl = document.getElementById("root");
 
 const render = () => {
+  console.log("test");
+
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>,
     rootEl
   );
 };
 
 if (module.hot) {
-  module.hot.accept("./App", () => {
+  module.hot.accept("./app/layout/App", () => {
     setTimeout(render);
   });
 }
+
+render();
 
 registerServiceWorker();
