@@ -1,8 +1,25 @@
+import { SubmissionError, reset } from "redux-form";
 // Actions
 import { closeModal } from "../modals/modalActions";
 // Types
 export const LOGIN_USER = "LOGIN_USER";
 export const SIGN_OUT_USER = "SIGN_OUT_USER";
+
+export const login = creds => async (dispatch, getState, { getFirebase }) => {
+  const firebase = getFirebase();
+
+  try {
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(creds.email, creds.password);
+    dispatch(closeModal());
+  } catch (err) {
+    console.log(err);
+    throw new SubmissionError({
+      _error: err.message
+    });
+  }
+};
 
 export const registerUser = user => async (
   dispatch,
@@ -31,5 +48,8 @@ export const registerUser = user => async (
     dispatch(closeModal());
   } catch (err) {
     console.log(err);
+    throw new SubmissionError({
+      _error: err.message
+    });
   }
 };
