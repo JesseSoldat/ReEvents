@@ -23,7 +23,7 @@ const RegisterForm = ({
           name="displayName"
           type="text"
           component={TextInput}
-          placeholder="Known As"
+          placeholder="Username"
         />
         <Field
           name="email"

@@ -9,7 +9,12 @@ import firebase from "../config/firebase";
 
 import rootReducer from "../reducers/rootReducer";
 
-const rrfConfig = {};
+const rrfConfig = {
+  userProfile: "users",
+  attachAuthIsReady: true,
+  useFirestoreForProfile: true,
+  updateProfileOnLogin: false
+};
 
 export const configureStore = preloadedState => {
   const middlewares = [thunk.withExtraArgument({ getFirebase, getFirestore })];
