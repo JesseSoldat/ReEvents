@@ -1,9 +1,6 @@
 import { SubmissionError, reset } from "redux-form";
 // Actions
 import { closeModal } from "../modals/modalActions";
-// Types
-export const LOGIN_USER = "LOGIN_USER";
-export const SIGN_OUT_USER = "SIGN_OUT_USER";
 
 export const login = creds => async (dispatch, getState, { getFirebase }) => {
   const firebase = getFirebase();
