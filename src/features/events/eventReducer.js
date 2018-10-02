@@ -13,6 +13,9 @@ export default (state = initialState, action) => {
     case FETCH_EVENTS:
       return [...payload.events];
 
+    case CREATE_EVENT:
+      return [...state, Object.assign({}, payload.event)];
+
     default:
       return [...state];
   }

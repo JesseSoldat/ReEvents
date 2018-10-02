@@ -33,6 +33,18 @@ const NavBar = ({ openModal, auth, profile, firebase, history }) => {
           Re-vents
         </Menu.Item>
         <Menu.Item as={NavLink} to="/events" name="Events" />
+        {authenticated && (
+          <Menu.Item>
+            <Button
+              as={Link}
+              to="/createEvent"
+              floated="right"
+              positive
+              inverted
+              content="Create Event"
+            />
+          </Menu.Item>
+        )}
         {authenticated ? (
           <SignedInMenu auth={auth} profile={profile} signOut={handleSignOut} />
         ) : (
