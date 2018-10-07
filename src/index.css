@@ -1,5 +1,8 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+  background-color: rgb(234, 234, 234) !important;
+}
+
+.main {
+  margin: 0 auto;
+  margin-top: 100px;
 }
