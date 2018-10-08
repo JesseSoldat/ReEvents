@@ -16,6 +16,7 @@ import TextInput from "../../../app/common/form/TextInput";
 import SelectInput from "../../../app/common/form/SelectInput";
 import TextArea from "../../../app/common/form/TextArea";
 import PlaceInput from "../../../app/common/form/PlaceInput";
+import DateInput from "../../../app/common/form/DateInput";
 
 const category = [
   { key: "drinks", text: "Drinks", value: "drinks" },
@@ -35,7 +36,6 @@ class EventForm extends Component {
 
   handleScriptLoaded = () => {
     this.setState({ scriptLoaded: true });
-    // console.log(window.google);
   };
 
   handleCitySelect = selectedCity => {
@@ -55,9 +55,7 @@ class EventForm extends Component {
           [type]: latlng
         });
       })
-      .then(() => {
-        // console.log(this.state);
-      });
+      .catch(err => console.log("geoByAddress", err));
   };
 
   updateSearchOptions = () => {
@@ -130,6 +128,15 @@ class EventForm extends Component {
                   />
                 </div>
               )}
+              <Field
+                name="date"
+                type="text"
+                component={DateInput}
+                dateFormat="YYYY-MM-DD HH:mm"
+                timeFormat="HH:mm"
+                showTimeSelect
+                placeholder="Date and time of event"
+              />
               <Button
                 loading={loading}
                 disabled={invalid || submitting || pristine}
@@ -137,6 +144,13 @@ class EventForm extends Component {
                 type="submit"
               >
                 Submit
+              </Button>
+              <Button
+                disabled={loading}
+                onClick={this.props.history.goBack}
+                type="button"
+              >
+                Cancel
               </Button>
             </Form>
           </Segment>
