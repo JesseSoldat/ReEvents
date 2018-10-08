@@ -34,11 +34,11 @@ const render = () => {
   );
 };
 
-if (module.hot) {
-  module.hot.accept("./app/layout/App", () => {
-    setTimeout(render);
-  });
-}
+// if (module.hot) {
+//   module.hot.accept("./app/layout/App", () => {
+//     setTimeout(render);
+//   });
+// }
 
 store.firebaseAuthIsReady.then(() => {
   render();

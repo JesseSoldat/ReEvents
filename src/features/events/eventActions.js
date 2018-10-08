@@ -50,14 +50,46 @@ export const getEventsForDashboard = lastEvent => async (
 ) => {
   const firestore = firebase.firestore();
   const eventsRef = firestore.collection("events");
-  const today = new Date(Date.now());
+
   try {
     dispatch(asyncActionStart());
 
-    let events = await eventsRef.get();
+    let query;
+    // console.log("Last Event", lastEvent);
+
+    let startAfter =
+      lastEvent &&
+      (await firestore
+        .collection("events")
+        .doc(lastEvent.id)
+        .get());
+
+    lastEvent
+      ? (query = eventsRef
+          .orderBy("date")
+          .startAfter(startAfter)
+          .limit(2))
+      : (query = eventsRef.orderBy("date").limit(2));
+
+    let querySnap = await query.get();
+
+    if (querySnap.docs.length === 0) {
+      dispatch(asyncActionFinish());
+      return querySnap;
+    }
+
+    const events = [];
+
+    for (let i = 0; i < querySnap.docs.length; i++) {
+      let evt = { ...querySnap.docs[i].data(), id: querySnap.docs[i].id };
+      events.push(evt);
+    }
+
+    // console.log("Action Events", events);
 
     dispatch({ type: FETCH_EVENTS, payload: { events } });
     dispatch(asyncActionFinish());
+    return querySnap;
   } catch (err) {
     console.log(err);
     dispatch(asyncActionError());

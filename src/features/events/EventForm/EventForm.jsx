@@ -71,8 +71,6 @@ class EventForm extends Component {
   };
 
   onFormSubmit = values => {
-    console.log(values);
-
     const formValues = {
       ...values,
       cityLatLng: this.state.cityLatLng,

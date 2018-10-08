@@ -29,14 +29,14 @@ export const configureStore = preloadedState => {
 
   const store = createStore(rootReducer, preloadedState, composedEnhancer);
 
-  if (process.env.NODE_ENV !== "product") {
-    if (module.hot) {
-      module.hot.accept("../reducers/rootReducer", () => {
-        const newRootReducer = require("../reducers/rootReducer").default;
-        store.replaceReducer(newRootReducer);
-      });
-    }
-  }
+  // if (process.env.NODE_ENV !== "product") {
+  //   if (module.hot) {
+  //     module.hot.accept("../reducers/rootReducer", () => {
+  //       const newRootReducer = require("../reducers/rootReducer").default;
+  //       store.replaceReducer(newRootReducer);
+  //     });
+  //   }
+  // }
 
   return store;
 };
