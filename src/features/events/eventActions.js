@@ -11,9 +11,6 @@ import {
 } from "../async/asyncActions";
 // Types
 export const FETCH_EVENTS = "FETCH_EVENTS";
-export const CREATE_EVENT = "CREATE_EVENT";
-export const UPDATE_EVENT = "UPDATE_EVENT";
-export const DELETE_EVENT = "DELETE_EVENT";
 
 export const createEvent = event => async (
   dispatch,
@@ -21,12 +18,24 @@ export const createEvent = event => async (
   { getFirestore }
 ) => {
   const firestore = getFirestore();
-  const user = firestore.auth().currentUser;
-  const photoURL = getState().firebase.profile.photoURL;
+
+  const user = getState().firebase.auth;
+  console.log("user", user);
+  const photoURL = user.photoURL;
+
   const newEvent = createNewEvent(user, photoURL, event);
+  console.log("newEvent", newEvent);
 
   try {
-    const createEvent = await firestore.add("events", newEvent);
+    const createdEvent = await firestore.add("events", newEvent);
+    console.log("createdEvent", createdEvent);
+
+    await firestore.set(`event_attendee/${createdEvent.id}_${user.uid}`, {
+      eventId: createdEvent.id,
+      userUid: user.uid,
+      eventDate: event.date,
+      host: true
+    });
 
     toastr.success("Success", "Event has been created");
   } catch (err) {

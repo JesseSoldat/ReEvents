@@ -11,6 +11,8 @@ import {
   isRequired,
   hasLengthGreaterThan
 } from "revalidate";
+// Actions
+import { createEvent } from "../eventActions";
 // Common Components
 import TextInput from "../../../app/common/form/TextInput";
 import SelectInput from "../../../app/common/form/SelectInput";
@@ -45,6 +47,7 @@ class EventForm extends Component {
 
   handleVenueSelect = selectedVenue => {
     this.props.change("venue", selectedVenue);
+    this.placeToGeoLocation(selectedVenue, "venueLatLng");
   };
 
   placeToGeoLocation = (place, type) => {
@@ -69,9 +72,15 @@ class EventForm extends Component {
 
   onFormSubmit = values => {
     console.log(values);
-    const { city, venue } = values;
-    this.placeToGeoLocation(city, "cityLatLng");
-    this.placeToGeoLocation(venue, "venueLatLng");
+
+    const formValues = {
+      ...values,
+      cityLatLng: this.state.cityLatLng,
+      venueLatLng: this.state.venueLatLng
+    };
+
+    this.props.createEvent(formValues);
+    this.props.history.push("/events");
   };
 
   render() {
@@ -169,12 +178,12 @@ const validate = combineValidators({
       message: "Description needs to be at least 5 characters"
     })
   )(),
-  city: isRequired("city")
-  // venue: isRequired("venue"),
-  // date: isRequired("date")
+  city: isRequired("city"),
+  venue: isRequired("venue"),
+  date: isRequired("date")
 });
 
-const mapStateToProps = ({ firestore, async }) => {
+const mapStateToProps = ({ firestore, firebase, async }) => {
   let event = {};
 
   if (firestore.ordered.events && firestore.ordered.events[0]) {
@@ -190,7 +199,7 @@ const mapStateToProps = ({ firestore, async }) => {
 export default withFirestore(
   connect(
     mapStateToProps,
-    {}
+    { createEvent }
   )(
     reduxForm({ form: "eventForm", enableReinitialize: true, validate })(
       EventForm

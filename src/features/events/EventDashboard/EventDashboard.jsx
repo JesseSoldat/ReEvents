@@ -13,7 +13,6 @@ class EventDashboard extends Component {
 
   async componentDidMount() {
     const next = await this.props.getEventsForDashboard();
-    console.log(next);
   }
 
   render() {
