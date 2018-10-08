@@ -4,65 +4,51 @@ import { Form, Label, Segment } from "semantic-ui-react";
 
 class PlacesInput extends Component {
   state = {
-    address: "",
-    scriptLoaded: false,
-    scriptError: false
-  };
-
-  handleScriptCreate = () => {
-    this.setState({ scriptLoaded: false });
-  };
-
-  handleScriptError = () => {
-    this.setState({ scriptError: true });
-  };
-
-  handleScriptLoad = () => {
-    this.setState({ scriptLoaded: true });
+    address: ""
   };
 
   handleChange = address => {
     this.setState({ address });
+    this.props.onSelect(address);
   };
+
+  renderFunc = ({ getInputProps, getSuggestionItemProps, suggestions }) => (
+    <div>
+      <input
+        {...getInputProps({
+          placeholder: this.props.placeholder
+        })}
+      />
+      <Segment.Group suggestions={suggestions}>
+        {suggestions.map(suggestion => (
+          <Segment {...getSuggestionItemProps(suggestion)}>
+            {suggestion.description}
+          </Segment>
+        ))}
+      </Segment.Group>
+    </div>
+  );
 
   render() {
     const {
-      input,
-      width,
-      placeholder,
-      onSelect,
+      searchOptions,
       meta: { touched, error }
     } = this.props;
     return (
-      <Form.Field error={touched && !!error} width={width}>
+      <Form.Field error={touched && !!error}>
         <PlacesAutocomplete
           value={this.state.address}
+          searchOptions={searchOptions}
           onChange={this.handleChange}
-          onSelect={onSelect}
-          placeholder={placeholder}
+          onSelect={this.handleChange}
+          debounce={200}
         >
-          {({ getInputProps, suggestions, getSuggestionItemProps }) => (
-            <div>
-              <input
-                {...getInputProps({
-                  placeholder
-                })}
-              />
-              <Segment.Group suggestions={suggestions}>
-                {suggestions.map(suggestion => (
-                  <Segment {...getSuggestionItemProps(suggestion)}>
-                    {suggestion.description}
-                  </Segment>
-                ))}
-              </Segment.Group>
-            </div>
-          )}
+          {this.renderFunc}
         </PlacesAutocomplete>
-        {/* {END PLACE COMPONENT} */}
-        {this.touched &&
-          this.error && (
+        {touched &&
+          !!error && (
             <Label basic color="red">
-              {this.error}
+              {error}
             </Label>
           )}
       </Form.Field>

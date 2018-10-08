@@ -4,6 +4,7 @@ import { reduxForm, Field } from "redux-form";
 import { withFirestore } from "react-redux-firebase";
 import Script from "react-load-script";
 import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import {
   composeValidators,
   combineValidators,
@@ -32,15 +33,51 @@ class EventForm extends Component {
     scriptLoaded: false
   };
 
-  handleScriptLoaded = () => this.setState({ scriptLoaded: true });
-
-  handleCitySelect = selectedCity => {
-    console.log(selectedCity);
+  handleScriptLoaded = () => {
+    this.setState({ scriptLoaded: true });
+    // console.log(window.google);
   };
 
-  onFormSubmit = () => {};
+  handleCitySelect = selectedCity => {
+    this.props.change("city", selectedCity);
+    this.placeToGeoLocation(selectedCity, "cityLatLng");
+  };
+
+  handleVenueSelect = selectedVenue => {
+    this.props.change("venue", selectedVenue);
+  };
+
+  placeToGeoLocation = (place, type) => {
+    geocodeByAddress(place)
+      .then(results => getLatLng(results[0]))
+      .then(latlng => {
+        this.setState({
+          [type]: latlng
+        });
+      })
+      .then(() => {
+        // console.log(this.state);
+      });
+  };
+
+  updateSearchOptions = () => {
+    const searchOptions = {
+      location: new window.google.maps.LatLng(this.state.cityLatLng),
+      radius: 1000,
+      types: ["establishment"]
+    };
+    return searchOptions;
+  };
+
+  onFormSubmit = values => {
+    console.log(values);
+    const { city, venue } = values;
+    this.placeToGeoLocation(city, "cityLatLng");
+    this.placeToGeoLocation(venue, "venueLatLng");
+  };
+
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, submitting, pristine, invalid, loading } = this.props;
     return (
       <Grid>
         <Script
@@ -73,15 +110,34 @@ class EventForm extends Component {
               />
               <Header sub color="teal" content="Event Location details" />
               {this.state.scriptLoaded && (
-                <Field
-                  name="city"
-                  type="text"
-                  component={PlaceInput}
-                  options={{ types: ["(cities)"] }}
-                  placeholder="Event city"
-                  onSelect={this.handleCitySelect}
-                />
+                <div>
+                  <Field
+                    name="city"
+                    type="text"
+                    component={PlaceInput}
+                    searchOptions={{ types: ["(cities)"] }}
+                    placeholder="Event city"
+                    input={this.state.city}
+                    onSelect={this.handleCitySelect}
+                  />
+                  <Field
+                    name="venue"
+                    type="text"
+                    component={PlaceInput}
+                    searchOptions={this.updateSearchOptions()}
+                    placeholder="Event venue"
+                    onSelect={this.handleVenueSelect}
+                  />
+                </div>
               )}
+              <Button
+                loading={loading}
+                disabled={invalid || submitting || pristine}
+                positive
+                type="submit"
+              >
+                Submit
+              </Button>
             </Form>
           </Segment>
         </Grid.Column>
@@ -99,9 +155,9 @@ const validate = combineValidators({
       message: "Description needs to be at least 5 characters"
     })
   )(),
-  city: isRequired("city"),
-  venue: isRequired("venue"),
-  date: isRequired("date")
+  city: isRequired("city")
+  // venue: isRequired("venue"),
+  // date: isRequired("date")
 });
 
 const mapStateToProps = ({ firestore, async }) => {
