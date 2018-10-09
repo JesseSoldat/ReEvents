@@ -10,3 +10,10 @@ export const createNewEvent = (user, photoURL, event) => {
     created: Date.now()
   };
 };
+
+export const objectToArray = obj => {
+  if (obj)
+    return Object.entries(obj).map(entry =>
+      Object.assign(entry[1], { id: entry[0] })
+    );
+};

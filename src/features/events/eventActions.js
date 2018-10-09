@@ -68,8 +68,8 @@ export const getEventsForDashboard = lastEvent => async (
       ? (query = eventsRef
           .orderBy("date")
           .startAfter(startAfter)
-          .limit(2))
-      : (query = eventsRef.orderBy("date").limit(2));
+          .limit(3))
+      : (query = eventsRef.orderBy("date").limit(3));
 
     let querySnap = await query.get();
 
@@ -84,8 +84,6 @@ export const getEventsForDashboard = lastEvent => async (
       let evt = { ...querySnap.docs[i].data(), id: querySnap.docs[i].id };
       events.push(evt);
     }
-
-    // console.log("Action Events", events);
 
     dispatch({ type: FETCH_EVENTS, payload: { events } });
     dispatch(asyncActionFinish());

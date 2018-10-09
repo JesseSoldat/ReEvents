@@ -12,7 +12,8 @@ class EventDashboard extends Component {
   state = {
     loadingInitial: true,
     loadedEvents: [],
-    moreEvents: false
+    moreEvents: false,
+    noEvents: true
   };
 
   async componentDidMount() {
@@ -21,6 +22,10 @@ class EventDashboard extends Component {
     if (next && next.docs && next.docs.length > 1) {
       this.setState({
         moreEvents: true,
+        loadingInitial: false
+      });
+    } else {
+      this.setState({
         loadingInitial: false
       });
     }
@@ -66,13 +71,18 @@ class EventDashboard extends Component {
 
   render() {
     const { loading } = this.props;
-    const { loadedEvents, moreEvents } = this.state;
+    const { noEvents, loadedEvents, moreEvents } = this.state;
 
     if (this.state.loadingInitial) return <LoadingComponent inverted={true} />;
 
     return (
       <Grid>
         <Grid.Column width={10}>
+          {noEvents && (
+            <div>
+              <h3>No Events Available</h3>
+            </div>
+          )}
           <div>
             <EventList
               loading={loading}
