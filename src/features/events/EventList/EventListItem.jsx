@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Segment, Item, Icon, List, Button, Label } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import format from "date-fns/format";
+// Custom Components
+import EventListAttendee from "./EventListAttendee";
 // utils
 import { objectToArray } from "../../../app/common/util/helpers";
 
@@ -42,7 +44,14 @@ class EventListItem extends Component {
             &nbsp;&nbsp;|&nbsp; <Icon name="marker" /> {event.venue}
           </span>
         </Segment>
-        <Segment secondary />
+        <Segment secondary>
+          <List horizontal>
+            {event.attendees &&
+              objectToArray(event.attendees).map(attendee => (
+                <EventListAttendee key={attendee.id} attendee={attendee} />
+              ))}
+          </List>
+        </Segment>
         <Segment clearing>
           <span>{event.description}</span>
           <Button

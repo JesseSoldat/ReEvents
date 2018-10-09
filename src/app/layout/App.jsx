@@ -20,7 +20,8 @@ const AsyncHomePage = Loadable({
   loader: () => import("../../features/home/HomePage"),
   loading: LoadingComponent
 });
-//Events
+
+// Events
 const AsyncEventDashboard = Loadable({
   loader: () => import("../../features/events/EventDashboard/EventDashboard"),
   loading: LoadingComponent
@@ -33,6 +34,18 @@ const AsyncEventDetailsPage = Loadable({
 
 const AsyncEventForm = Loadable({
   loader: () => import("../../features/events/EventForm/EventForm"),
+  loading: LoadingComponent
+});
+
+// User Profiles
+const AsyncUserDetailsPage = Loadable({
+  loader: () => import("../../features/user/UserDetails/UserDetailsPage"),
+  loading: LoadingComponent
+});
+
+// Not Found
+const AsyncNotFound = Loadable({
+  loader: () => import("../../app/layout/NotFound"),
   loading: LoadingComponent
 });
 
@@ -53,6 +66,9 @@ class App extends Component {
                   <Route path="/events" component={AsyncEventDashboard} />
                   <Route path="/createEvent" component={AsyncEventForm} />
                   <Route path="/event/:id" component={AsyncEventDetailsPage} />
+                  <Route path="/profile/:id" component={AsyncUserDetailsPage} />
+                  <Route path="/error" component={AsyncNotFound} />
+                  <Route component={AsyncNotFound} />
                 </Switch>
               </Container>
             </div>

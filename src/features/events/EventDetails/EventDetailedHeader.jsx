@@ -27,6 +27,7 @@ const EventDetailedHeader = ({
   cancelGoingToEvent
 }) => {
   let eventDate;
+
   if (event.date) {
     eventDate = event.date.toDate();
   }

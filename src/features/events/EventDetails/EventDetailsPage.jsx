@@ -30,6 +30,8 @@ class EventDetailsPage extends Component {
         return this.props.history.push("/events");
       }
 
+      await firestore.setListener(`events/${match.params.id}`);
+
       this.setState({
         initialLoading: false
       });
@@ -38,10 +40,27 @@ class EventDetailsPage extends Component {
     }
   }
 
-  render() {
-    const { match, loading, event, auth, openModal, goingToEvent } = this.props;
+  async componentWillUnmount() {
+    const { firestore, match } = this.props;
+    await firestore.unsetListener(`events/${match.params.id}`);
+  }
 
-    if (this.state.initialLoading) return <LoadingComponent inverted={true} />;
+  render() {
+    const {
+      match,
+      loading,
+      requesting,
+      event,
+      auth,
+      openModal,
+      goingToEvent,
+      cancelGoingToEvent
+    } = this.props;
+
+    const loadingEvent = requesting[`events/${match.params.id}`];
+
+    if (loadingEvent || this.state.initialLoading)
+      return <LoadingComponent inverted={true} />;
 
     const attendees =
       event &&
@@ -51,6 +70,9 @@ class EventDetailsPage extends Component {
       });
     const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
+    // console.log("requesting", requesting);
+    console.log("isGoing", isGoing);
+
     const authenticated = auth.isLoaded && !auth.isEmpty;
 
     return (
@@ -79,9 +101,11 @@ const mapStateToProps = ({ firestore, firebase, async }) => {
 
   if (firestore.ordered.events && firestore.ordered.events[0]) {
     event = firestore.ordered.events[0];
+    // console.log("event", event);
   }
 
   return {
+    requesting: firestore.status.requesting,
     event,
     loading: async.loading,
     auth: firebase.auth
