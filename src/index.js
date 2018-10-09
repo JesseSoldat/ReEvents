@@ -7,7 +7,7 @@ import ReduxToastr from "react-redux-toastr";
 import "semantic-ui-css/semantic.min.css";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import "./index.css";
-
+import ScrollToTop from "./app/common/util/ScrollToTop";
 import App from "./app/layout/App";
 import { configureStore } from "./app/store/configureStore";
 import registerServiceWorker from "./registerServiceWorker";
@@ -20,14 +20,14 @@ const render = () => {
   ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>
-        <div>
+        <ScrollToTop>
           <ReduxToastr
             position="bottom-right"
             transitionIn="fadeIn"
             transitionOut="fadeOut"
           />
           <App />
-        </div>
+        </ScrollToTop>
       </BrowserRouter>
     </Provider>,
     rootEl

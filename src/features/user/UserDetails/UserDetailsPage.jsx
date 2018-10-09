@@ -10,6 +10,8 @@ import LoadingComponent from "../../../app/layout/Loading";
 import UserDetailedHeader from "./UserDetailedHeader";
 import UserDetailedDescription from "./UserDetailedDescription";
 import UserDetailedPhotos from "./UserDetailedPhotos";
+import UserDetailedSidebar from "./UserDetailedSidebar";
+import UserDetailedEvents from "./UserDetailedEvents";
 // Queries
 import { userDetailedQuery } from "../userQueries";
 // Actions
@@ -44,11 +46,16 @@ class UserDetailsPage extends Component {
     const loading = requesting[`users/${match.params.id}`];
 
     if (loading) return <LoadingComponent inverted={true} />;
+
+    const isCurrentUser = auth.uid === match.params.id;
+
     return (
       <Grid>
         <UserDetailedHeader profile={profile} />
         <UserDetailedDescription profile={profile} />
+        <UserDetailedSidebar profile={profile} isCurrentUser={isCurrentUser} />
         <UserDetailedPhotos photos={photos} />
+        <UserDetailedEvents events={events} eventsLoading={eventsLoading} />
       </Grid>
     );
   }

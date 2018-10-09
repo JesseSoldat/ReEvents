@@ -1,7 +1,6 @@
 import moment from "moment";
 import firebase from "../../app/config/firebase";
 import { toastr } from "react-redux-toastr";
-import cuid from "cuid";
 import {
   asyncActionError,
   asyncActionStart,

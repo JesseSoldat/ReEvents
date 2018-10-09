@@ -1,4 +1,3 @@
-import moment from "moment";
 import { toastr } from "react-redux-toastr";
 import firebase from "../../app/config/firebase";
 // Utils

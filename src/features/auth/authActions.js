@@ -1,4 +1,4 @@
-import { SubmissionError, reset } from "redux-form";
+import { SubmissionError } from "redux-form";
 // Actions
 import { closeModal } from "../modals/modalActions";
 
@@ -56,8 +56,6 @@ export const socialLogin = selectedProvider => async (
   getState,
   { getFirebase, getFirestore }
 ) => {
-  console.log("social");
-
   const firebase = getFirebase();
   const firestore = getFirestore();
   try {
@@ -67,7 +65,7 @@ export const socialLogin = selectedProvider => async (
       type: "popup"
     });
 
-    console.log(user);
+    //console.log('Social Login:', user);
 
     if (user.additionalUserInfo.isNewUser) {
       await firestore.set(`users/${user.user.uid}`, {
