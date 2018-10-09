@@ -3,17 +3,20 @@ import { connect } from "react-redux";
 import { Form, Segment, Button, Label, Divider } from "semantic-ui-react";
 import { combineValidators, isRequired } from "revalidate";
 import { Field, reduxForm } from "redux-form";
-// Actions
-import { registerUser } from "../authActions";
-// Components
+// Common Components
 import TextInput from "../../../app/common/form/TextInput";
+// Custom Components
+import SocialLogin from "../SocialLogin/SocialLogin";
+// Actions
+import { registerUser, socialLogin } from "../authActions";
 
 const RegisterForm = ({
   registerUser,
   handleSubmit,
   error,
   invalid,
-  submitting
+  submitting,
+  socialLogin
 }) => {
   return (
     <Form size="large" onSubmit={handleSubmit(registerUser)}>
@@ -50,6 +53,8 @@ const RegisterForm = ({
         >
           Register
         </Button>
+        <Divider horizontal>Or</Divider>
+        <SocialLogin socialLogin={socialLogin} />
       </Segment>
     </Form>
   );
@@ -63,5 +68,5 @@ const validate = combineValidators({
 
 export default connect(
   null,
-  { registerUser }
+  { registerUser, socialLogin }
 )(reduxForm({ form: "registerForm", validate })(RegisterForm));

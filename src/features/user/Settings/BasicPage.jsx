@@ -7,15 +7,15 @@ import Script from "react-load-script";
 import DateInput from "../../../app/common/form/DateInput";
 import PlaceInput from "../../../app/common/form/PlaceInput";
 import TextInput from "../../../app/common/form/TextInput";
+import RadioInput from "../../../app/common/form/RadioInput";
 
 class BasicPage extends Component {
   state = {
-    scriptLoaded: false,
-    city: ""
+    city: "",
+    scriptLoaded: false
   };
 
   handleScriptLoaded = () => {
-    console.log("loaded script", window.google);
     this.setState({ scriptLoaded: true });
   };
 
@@ -42,6 +42,22 @@ class BasicPage extends Component {
             placeholder="Known As"
           />
 
+          <Form.Group inline>
+            <label>Gender: </label>
+            <Field
+              name="gender"
+              value="male"
+              label="Male"
+              component={RadioInput}
+            />
+            <Field
+              name="gender"
+              value="female"
+              label="Female"
+              component={RadioInput}
+            />
+          </Form.Group>
+
           <Field
             width={8}
             name="dateOfBirth"
@@ -54,18 +70,16 @@ class BasicPage extends Component {
             placeholder="Date of Birth"
           />
 
-          {this.state.scriptLoaded && (
-            <Field
-              name="city"
-              placeholder="Home Town"
-              searchOptions={{ types: ["(cities)"] }}
-              label="Home Town"
-              input={this.state.city}
-              onSelect={this.handleCitySelect}
-              component={PlaceInput}
-              width={8}
-            />
-          )}
+          <Field
+            name="city"
+            placeholder="Home Town"
+            searchOptions={{ types: ["(cities)"] }}
+            label="Home Town"
+            input={this.state.city}
+            onSelect={this.handleCitySelect}
+            component={PlaceInput}
+            width={8}
+          />
 
           <Divider />
           <Button

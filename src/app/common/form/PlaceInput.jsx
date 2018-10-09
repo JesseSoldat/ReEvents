@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import PlacesAutocomplete from "react-places-autocomplete";
+import Script from "react-load-script";
 import { Form, Label, Segment } from "semantic-ui-react";
 
 class PlacesInput extends Component {
   state = {
-    address: ""
+    address: "",
+    scriptLoaded: false
   };
+
+  handleScriptLoaded = () => this.setState({ scriptLoaded: true });
 
   handleChange = address => {
     this.setState({ address });
@@ -36,15 +40,21 @@ class PlacesInput extends Component {
     } = this.props;
     return (
       <Form.Field error={touched && !!error}>
-        <PlacesAutocomplete
-          value={this.state.address}
-          searchOptions={searchOptions}
-          onChange={this.handleChange}
-          onSelect={this.handleChange}
-          debounce={200}
-        >
-          {this.renderFunc}
-        </PlacesAutocomplete>
+        <Script
+          url="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7V7ExJydkww--H26Wtuo5NXrWmb9VEhI&libraries=places"
+          onLoad={this.handleScriptLoaded}
+        />
+        {this.state.scriptLoaded && (
+          <PlacesAutocomplete
+            value={this.state.address}
+            searchOptions={searchOptions}
+            onChange={this.handleChange}
+            onSelect={this.handleChange}
+            debounce={200}
+          >
+            {this.renderFunc}
+          </PlacesAutocomplete>
+        )}
         {touched &&
           !!error && (
             <Label basic color="red">

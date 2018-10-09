@@ -10,6 +10,9 @@ const SettingsNav = () => {
         <Menu.Item as={NavLink} to="/settings/basic">
           Basics
         </Menu.Item>
+        <Menu.Item as={NavLink} to="/settings/about">
+          About Me
+        </Menu.Item>
       </Menu>
       <Grid.Row />
       <Menu vertical>
