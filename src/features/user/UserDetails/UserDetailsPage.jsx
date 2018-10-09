@@ -8,6 +8,8 @@ import { toastr } from "react-redux-toastr";
 import LoadingComponent from "../../../app/layout/Loading";
 // Custom Components
 import UserDetailedHeader from "./UserDetailedHeader";
+import UserDetailedDescription from "./UserDetailedDescription";
+import UserDetailedPhotos from "./UserDetailedPhotos";
 // Queries
 import { userDetailedQuery } from "../userQueries";
 // Actions
@@ -45,6 +47,8 @@ class UserDetailsPage extends Component {
     return (
       <Grid>
         <UserDetailedHeader profile={profile} />
+        <UserDetailedDescription profile={profile} />
+        <UserDetailedPhotos photos={photos} />
       </Grid>
     );
   }

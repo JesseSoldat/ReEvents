@@ -43,6 +43,12 @@ const AsyncUserDetailsPage = Loadable({
   loading: LoadingComponent
 });
 
+// Settings
+const AsyncSettingsDashboard = Loadable({
+  loader: () => import("../../features/user/Settings/SettingsDashboard"),
+  loading: LoadingComponent
+});
+
 // Not Found
 const AsyncNotFound = Loadable({
   loader: () => import("../../app/layout/NotFound"),
@@ -67,6 +73,7 @@ class App extends Component {
                   <Route path="/createEvent" component={AsyncEventForm} />
                   <Route path="/event/:id" component={AsyncEventDetailsPage} />
                   <Route path="/profile/:id" component={AsyncUserDetailsPage} />
+                  <Route path="/settings" component={AsyncSettingsDashboard} />
                   <Route path="/error" component={AsyncNotFound} />
                   <Route component={AsyncNotFound} />
                 </Switch>

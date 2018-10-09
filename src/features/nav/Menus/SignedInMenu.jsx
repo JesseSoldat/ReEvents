@@ -31,6 +31,13 @@ const SignedInMenu = ({ signOut, profile, auth }) => {
             icon="user"
           />
 
+          <Dropdown.Item
+            as={Link}
+            to="/settings"
+            text="Settings"
+            icon="settings"
+          />
+
           <Dropdown.Item onClick={signOut} text="Sign Out" icon="power" />
         </Dropdown.Menu>
       </Dropdown>

@@ -135,3 +135,24 @@ export const getUserEvents = (userUid, activeTab) => async (
     dispatch(asyncActionError());
   }
 };
+
+export const updateProfile = user => async (
+  dispatch,
+  getState,
+  { getFirebase }
+) => {
+  const firebase = getFirebase();
+  // we do not want to save isLoaded || isEmpty
+  const { isLoaded, isEmpty, ...updatedUser } = user;
+
+  if (updatedUser.dateOfBirth !== getState().firebase.profile.dateOfBirth) {
+    updatedUser.dateOfBirth = moment(updatedUser.dateOfBirth).toDate();
+  }
+
+  try {
+    await firebase.updateProfile(updatedUser);
+    toastr.success("Success", "Profile updated");
+  } catch (error) {
+    console.log(error);
+  }
+};
