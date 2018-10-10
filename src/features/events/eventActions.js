@@ -17,17 +17,16 @@ export const createEvent = event => async (
   { getFirestore }
 ) => {
   const firestore = getFirestore();
-
+  const photoURL = getState().firebase.profile.photoURL;
   const user = getState().firebase.auth;
-  console.log("user", user);
-  const photoURL = user.photoURL;
+  // console.log("user", user);
 
   const newEvent = createNewEvent(user, photoURL, event);
-  console.log("newEvent", newEvent);
+  // console.log("newEvent", newEvent);
 
   try {
     const createdEvent = await firestore.add("events", newEvent);
-    console.log("createdEvent", createdEvent);
+    // console.log("createdEvent", createdEvent);
 
     await firestore.set(`event_attendee/${createdEvent.id}_${user.uid}`, {
       eventId: createdEvent.id,

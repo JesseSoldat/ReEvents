@@ -236,7 +236,7 @@ export const setMainPhoto = photo => async (
   const eventAttendeeRef = firestore.collection("event_attendee");
 
   try {
-    let batch = firestore.batch();
+    const batch = firestore.batch();
 
     await batch.update(userDocRef, {
       photoURL: photo.url
@@ -255,23 +255,47 @@ export const setMainPhoto = photo => async (
 
       const event = await eventDocRef.get();
 
+      // Check if current user is the host
       if (event.data().hostUid === user.uid) {
         batch.update(eventDocRef, {
           hostPhotoURL: photo.url,
           [`attendees.${user.uid}.photoURL`]: photo.url
         });
-      } else {
+      }
+      // Update photo for attendee with current user photo
+      else {
         batch.update(eventDocRef, {
           [`attendees.${user.uid}.photoURL`]: photo.url
         });
       }
     }
-    console.log(batch);
+
     await batch.commit();
     dispatch(asyncActionFinish());
   } catch (error) {
     console.log(error);
     dispatch(asyncActionError());
     throw new Error("Problem setting main photo");
+  }
+};
+
+export const deletePhoto = photo => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const user = firebase.auth().currentUser;
+  try {
+    await firebase.deleteFile(`${user.uid}/user_images/${photo.name}`);
+    await firestore.delete({
+      collection: "users",
+      doc: user.uid,
+      subcollections: [{ collection: "photos", doc: photo.id }]
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("Problem deleting the photo");
   }
 };

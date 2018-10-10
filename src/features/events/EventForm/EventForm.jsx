@@ -177,8 +177,6 @@ const validate = combineValidators({
 const mapStateToProps = ({ firestore, firebase, async }, ownProps) => {
   let event = {};
 
-  console.log(ownProps.formName);
-
   if (firestore.ordered.events && firestore.ordered.events[0]) {
     event = firestore.ordered.events[0];
   }

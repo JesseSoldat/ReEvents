@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Grid, Loader } from "semantic-ui-react";
 import { connect } from "react-redux";
+import { firestoreConnect } from "react-redux-firebase";
 // Common Components
 import LoadingComponent from "../../../app/layout/Loading";
 // Custom Components
 import EventList from "../EventList/EventList";
+import EventActivity from "../EventActivity/EventActivity";
 // Actions
 import { getEventsForDashboard } from "../eventActions";
 
@@ -74,7 +76,7 @@ class EventDashboard extends Component {
   };
 
   render() {
-    const { loading } = this.props;
+    const { loading, activities } = this.props;
     const { noEvents, loadedEvents, moreEvents } = this.state;
 
     if (this.state.loadingInitial) return <LoadingComponent inverted={true} />;
@@ -96,7 +98,12 @@ class EventDashboard extends Component {
             />
           </div>
         </Grid.Column>
-        <Grid.Column width={6} />
+        <Grid.Column width={6}>
+          <EventActivity
+            activities={activities}
+            contextRef={this.state.contextRef}
+          />
+        </Grid.Column>
         <Grid.Column width={10}>
           <Loader active={loading} />
         </Grid.Column>
@@ -105,12 +112,21 @@ class EventDashboard extends Component {
   }
 }
 
-const mapStateToProps = ({ async, events }) => ({
+const query = [
+  {
+    collection: "activity",
+    orderBy: ["timestamp", "desc"],
+    limit: 5
+  }
+];
+
+const mapStateToProps = ({ async, events, firestore }) => ({
   loading: async.loading,
-  events
+  events,
+  activities: firestore.ordered.activity
 });
 
 export default connect(
   mapStateToProps,
   { getEventsForDashboard }
-)(EventDashboard);
+)(firestoreConnect(query)(EventDashboard));

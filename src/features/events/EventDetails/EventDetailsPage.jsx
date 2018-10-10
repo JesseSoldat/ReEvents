@@ -9,6 +9,7 @@ import LoadingComponent from "../../../app/layout/Loading";
 // Custom Components
 import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
+import EventDetailedSidebar from "./EventDetailedSidebar";
 // Actions
 import { openModal } from "../../modals/modalActions";
 import { goingToEvent, cancelGoingToEvent } from "../../user/userActions";
@@ -90,7 +91,9 @@ class EventDetailsPage extends Component {
           />
           <EventDetailedInfo event={event} />
         </Grid.Column>
-        <Grid.Column width={6} />
+        <Grid.Column width={6}>
+          <EventDetailedSidebar attendees={attendees} />
+        </Grid.Column>
       </Grid>
     );
   }
