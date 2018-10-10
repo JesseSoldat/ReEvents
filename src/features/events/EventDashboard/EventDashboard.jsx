@@ -61,6 +61,8 @@ class EventDashboard extends Component {
     }
   }
 
+  componentWillUnmount() {}
+
   getNextEvents = async () => {
     const { events } = this.props;
 

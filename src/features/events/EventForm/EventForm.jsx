@@ -12,7 +12,7 @@ import {
   hasLengthGreaterThan
 } from "revalidate";
 // Actions
-import { createEvent } from "../eventActions";
+import { createEvent, cancelToggle } from "../eventActions";
 // Common Components
 import TextInput from "../../../app/common/form/TextInput";
 import SelectInput from "../../../app/common/form/SelectInput";
@@ -75,7 +75,15 @@ class EventForm extends Component {
   };
 
   render() {
-    const { handleSubmit, submitting, pristine, invalid, loading } = this.props;
+    const {
+      handleSubmit,
+      submitting,
+      pristine,
+      invalid,
+      loading,
+      event,
+      cancelToggle
+    } = this.props;
     return (
       <Grid>
         <Script
@@ -152,6 +160,17 @@ class EventForm extends Component {
               >
                 Cancel
               </Button>
+              {event.id && (
+                <Button
+                  onClick={() => cancelToggle(!event.cancelled, event.id)}
+                  type="button"
+                  color={event.cancelled ? "green" : "red"}
+                  floated="right"
+                  content={
+                    event.cancelled ? "Reactivate Event" : "Cancel Event"
+                  }
+                />
+              )}
             </Form>
           </Segment>
         </Grid.Column>
@@ -190,7 +209,7 @@ const mapStateToProps = ({ firestore, firebase, async }, ownProps) => {
 export default withFirestore(
   connect(
     mapStateToProps,
-    { createEvent }
+    { createEvent, cancelToggle }
   )(
     reduxForm({ form: "eventForm", enableReinitialize: true, validate })(
       EventForm
