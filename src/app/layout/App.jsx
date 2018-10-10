@@ -32,8 +32,13 @@ const AsyncEventDetailsPage = Loadable({
   loading: LoadingComponent
 });
 
-const AsyncEventForm = Loadable({
-  loader: () => import("../../features/events/EventForm/EventForm"),
+const AsyncNewEvent = Loadable({
+  loader: () => import("../../features/events/EventForm/NewEvent"),
+  loading: LoadingComponent
+});
+
+const AsyncEditEvent = Loadable({
+  loader: () => import("../../features/events/EventForm/EditEvent"),
   loading: LoadingComponent
 });
 
@@ -46,6 +51,12 @@ const AsyncUserDetailsPage = Loadable({
 // Settings
 const AsyncSettingsDashboard = Loadable({
   loader: () => import("../../features/user/Settings/SettingsDashboard"),
+  loading: LoadingComponent
+});
+
+// People
+const AsyncPeopleDashboard = Loadable({
+  loader: () => import("../../features/user/PeopleDashboard/PeopleDashboard"),
   loading: LoadingComponent
 });
 
@@ -70,10 +81,12 @@ class App extends Component {
               <Container className="main">
                 <Switch>
                   <Route path="/events" component={AsyncEventDashboard} />
-                  <Route path="/createEvent" component={AsyncEventForm} />
+                  <Route path="/createEvent" component={AsyncNewEvent} />
                   <Route path="/event/:id" component={AsyncEventDetailsPage} />
+                  <Route path="/manage/:id" component={AsyncEditEvent} />
                   <Route path="/profile/:id" component={AsyncUserDetailsPage} />
                   <Route path="/settings" component={AsyncSettingsDashboard} />
+                  <Route path="/people" component={AsyncPeopleDashboard} />
                   <Route path="/error" component={AsyncNotFound} />
                   <Route component={AsyncNotFound} />
                 </Switch>

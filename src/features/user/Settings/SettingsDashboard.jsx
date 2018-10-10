@@ -6,11 +6,18 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import SettingsNav from "./SettingsNav";
 import BasicPage from "./BasicPage";
 import AboutPage from "./AboutPage";
-
+import PhotosPage from "./PhotosPage";
+import AccountPage from "./AccountPage";
 // Actions
 import { updateProfile } from "../userActions";
+import { updatePassword } from "../../auth/authActions";
 
-const SettingsDashboard = ({ user, updateProfile }) => {
+const SettingsDashboard = ({
+  user,
+  providerId,
+  updateProfile,
+  updatePassword
+}) => {
   return (
     <Grid>
       <Grid.Column width={12}>
@@ -26,6 +33,16 @@ const SettingsDashboard = ({ user, updateProfile }) => {
             path="/settings/about"
             render={() => (
               <AboutPage updateProfile={updateProfile} initialValues={user} />
+            )}
+          />
+          <Route path="/settings/photos" component={PhotosPage} />
+          <Route
+            path="/settings/account"
+            render={() => (
+              <AccountPage
+                updatePassword={updatePassword}
+                providerId={providerId}
+              />
             )}
           />
         </Switch>
@@ -44,5 +61,5 @@ const mapStateToProps = ({ firebase }) => ({
 
 export default connect(
   mapStateToProps,
-  { updateProfile }
+  { updateProfile, updatePassword }
 )(SettingsDashboard);

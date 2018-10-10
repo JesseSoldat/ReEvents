@@ -13,6 +13,9 @@ const SettingsNav = () => {
         <Menu.Item as={NavLink} to="/settings/about">
           About Me
         </Menu.Item>
+        <Menu.Item as={NavLink} to="/settings/photos">
+          My Photos
+        </Menu.Item>
       </Menu>
       <Grid.Row />
       <Menu vertical>
@@ -23,6 +26,9 @@ const SettingsNav = () => {
           color="grey"
           content="Account"
         />
+        <Menu.Item as={NavLink} to="/settings/account">
+          My Account
+        </Menu.Item>
       </Menu>
     </Grid.Column>
   );

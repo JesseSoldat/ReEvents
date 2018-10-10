@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Segment, Form, Header, Divider, Button } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import moment from "moment";
-import Script from "react-load-script";
 // Common Components
 import DateInput from "../../../app/common/form/DateInput";
 import PlaceInput from "../../../app/common/form/PlaceInput";
@@ -11,16 +10,10 @@ import RadioInput from "../../../app/common/form/RadioInput";
 
 class BasicPage extends Component {
   state = {
-    city: "",
-    scriptLoaded: false
-  };
-
-  handleScriptLoaded = () => {
-    this.setState({ scriptLoaded: true });
+    city: ""
   };
 
   handleCitySelect = city => {
-    console.log(city);
     this.props.change("city", city);
   };
 
@@ -28,10 +21,6 @@ class BasicPage extends Component {
     const { pristine, submitting, handleSubmit, updateProfile } = this.props;
     return (
       <Segment>
-        <Script
-          url="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7V7ExJydkww--H26Wtuo5NXrWmb9VEhI&libraries=places"
-          onLoad={this.handleScriptLoaded}
-        />
         <Header dividing size="large" content="Basics" />
         <Form onSubmit={handleSubmit(updateProfile)}>
           <Field
@@ -46,12 +35,14 @@ class BasicPage extends Component {
             <label>Gender: </label>
             <Field
               name="gender"
+              type="radio"
               value="male"
               label="Male"
               component={RadioInput}
             />
             <Field
               name="gender"
+              type="radio"
               value="female"
               label="Female"
               component={RadioInput}

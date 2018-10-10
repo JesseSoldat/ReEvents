@@ -28,18 +28,21 @@ const AboutPage = ({ pristine, submitting, handleSubmit, updateProfile }) => {
           <Field
             name="status"
             component={RadioInput}
+            type="radio"
             value="single"
             label="Single"
           />
           <Field
             name="status"
             component={RadioInput}
+            type="radio"
             value="relationship"
             label="Relationship"
           />
           <Field
             name="status"
             component={RadioInput}
+            type="radio"
             value="married"
             label="Married"
           />

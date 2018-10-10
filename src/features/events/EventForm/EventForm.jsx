@@ -19,15 +19,8 @@ import SelectInput from "../../../app/common/form/SelectInput";
 import TextArea from "../../../app/common/form/TextArea";
 import PlaceInput from "../../../app/common/form/PlaceInput";
 import DateInput from "../../../app/common/form/DateInput";
-
-const category = [
-  { key: "drinks", text: "Drinks", value: "drinks" },
-  { key: "culture", text: "Culture", value: "culture" },
-  { key: "film", text: "Film", value: "film" },
-  { key: "food", text: "Food", value: "food" },
-  { key: "music", text: "Music", value: "music" },
-  { key: "travel", text: "Travel", value: "travel" }
-];
+// Data
+import category from "./category";
 
 class EventForm extends Component {
   state = {
@@ -181,8 +174,10 @@ const validate = combineValidators({
   date: isRequired("date")
 });
 
-const mapStateToProps = ({ firestore, firebase, async }) => {
+const mapStateToProps = ({ firestore, firebase, async }, ownProps) => {
   let event = {};
+
+  console.log(ownProps.formName);
 
   if (firestore.ordered.events && firestore.ordered.events[0]) {
     event = firestore.ordered.events[0];
