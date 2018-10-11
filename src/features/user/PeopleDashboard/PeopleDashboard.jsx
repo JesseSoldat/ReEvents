@@ -13,19 +13,29 @@ const PeopleDashboard = ({ followings, followers }) => {
         <Segment>
           <Header dividing content="People following me" />
           <Card.Group itemsPerRow={8} stackable>
-            {followers &&
+            {followers && followers.length ? (
               followers.map(follower => (
                 <PersonCard key={follower.id} user={follower} />
-              ))}
+              ))
+            ) : (
+              <Header style={{ padding: "20px 10px" }} as="h5">
+                No one is following you.
+              </Header>
+            )}
           </Card.Group>
         </Segment>
         <Segment>
           <Header dividing content="People I'm following" />
           <Card.Group itemsPerRow={8} stackable>
-            {followers &&
+            {followings && followings.length ? (
               followings.map(following => (
                 <PersonCard key={following.id} user={following} />
-              ))}
+              ))
+            ) : (
+              <Header style={{ padding: "20px 10px" }} as="h5">
+                You are not following anyone.
+              </Header>
+            )}
           </Card.Group>
         </Segment>
       </Grid.Column>

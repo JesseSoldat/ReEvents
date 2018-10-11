@@ -304,10 +304,14 @@ export const deletePhoto = photo => async (
 export const followUser = userToFollow => async (
   dispatch,
   getState,
-  { getFirestore }
+  { getFirestore, getFirebase }
 ) => {
   const firestore = getFirestore();
-  const user = firestore.auth().currentUser;
+  const firebase = getFirebase();
+  const user = firebase.auth().currentUser;
+
+  // console.log("userToFollow", userToFollow);
+
   const following = {
     photoURL: userToFollow.photoURL || "/assets/user.png",
     city: userToFollow.city || "unknown city",
@@ -330,10 +334,12 @@ export const followUser = userToFollow => async (
 export const unfollowUser = userToUnfollow => async (
   dispatch,
   getState,
-  { getFirestore }
+  { getFirestore, getFirebase }
 ) => {
   const firestore = getFirestore();
-  const user = firestore.auth().currentUser;
+  const firebase = getFirebase();
+  const user = firebase.auth().currentUser;
+
   try {
     await firestore.delete({
       collection: "users",
