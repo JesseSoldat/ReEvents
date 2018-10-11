@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import Loadable from "react-loadable";
 // Components
 import LoadingComponent from "./Loading";
+import { UserIsAuthenticated } from "../../features/auth/authWrapper";
 // Nav
 const AsyncNavBar = Loadable({
   loader: () => import("../../features/nav/NavBar/NavBar"),
@@ -81,12 +82,27 @@ class App extends Component {
               <Container className="main">
                 <Switch>
                   <Route path="/events" component={AsyncEventDashboard} />
-                  <Route path="/createEvent" component={AsyncNewEvent} />
                   <Route path="/event/:id" component={AsyncEventDetailsPage} />
-                  <Route path="/manage/:id" component={AsyncEditEvent} />
-                  <Route path="/profile/:id" component={AsyncUserDetailsPage} />
-                  <Route path="/settings" component={AsyncSettingsDashboard} />
-                  <Route path="/people" component={AsyncPeopleDashboard} />
+                  <Route
+                    path="/createEvent"
+                    component={UserIsAuthenticated(AsyncNewEvent)}
+                  />
+                  <Route
+                    path="/manage/:id"
+                    component={UserIsAuthenticated(AsyncEditEvent)}
+                  />
+                  <Route
+                    path="/profile/:id"
+                    component={UserIsAuthenticated(AsyncUserDetailsPage)}
+                  />
+                  <Route
+                    path="/settings"
+                    component={UserIsAuthenticated(AsyncSettingsDashboard)}
+                  />
+                  <Route
+                    path="/people"
+                    component={UserIsAuthenticated(AsyncPeopleDashboard)}
+                  />
                   <Route path="/error" component={AsyncNotFound} />
                   <Route component={AsyncNotFound} />
                 </Switch>

@@ -11,7 +11,7 @@ const SignedInMenu = ({ signOut, profile, auth }) => {
         src={profile.photoURL || "/assets/user.png"}
       />
       <Dropdown pointing="top left" text={profile.displayName}>
-        <Dropdown.Menu>
+        <Dropdown.Menu style={{ zIndex: 1000 }}>
           <Dropdown.Item
             as={Link}
             to="/createEvent"

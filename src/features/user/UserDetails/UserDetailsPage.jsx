@@ -15,7 +15,7 @@ import UserDetailedEvents from "./UserDetailedEvents";
 // Queries
 import { userDetailedQuery } from "../userQueries";
 // Actions
-import { getUserEvents } from "../userActions";
+import { getUserEvents, followUser, unfollowUser } from "../userActions";
 
 class UserDetailsPage extends Component {
   async componentDidMount() {
@@ -40,7 +40,10 @@ class UserDetailsPage extends Component {
       match,
       requesting,
       events,
-      eventsLoading
+      eventsLoading,
+      following,
+      followUser,
+      unfollowUser
     } = this.props;
 
     const loading = requesting[`users/${match.params.id}`];
@@ -48,12 +51,19 @@ class UserDetailsPage extends Component {
     if (loading) return <LoadingComponent inverted={true} />;
 
     const isCurrentUser = auth.uid === match.params.id;
+    const isFollowing = !isEmpty(following);
 
     return (
       <Grid>
         <UserDetailedHeader profile={profile} />
         <UserDetailedDescription profile={profile} />
-        <UserDetailedSidebar profile={profile} isCurrentUser={isCurrentUser} />
+        <UserDetailedSidebar
+          unfollowUser={unfollowUser}
+          isFollowing={isFollowing}
+          profile={profile}
+          followUser={followUser}
+          isCurrentUser={isCurrentUser}
+        />
         <UserDetailedPhotos photos={photos} />
         <UserDetailedEvents events={events} eventsLoading={eventsLoading} />
       </Grid>
@@ -83,14 +93,15 @@ const mapStateToProps = ({ async, events, firebase, firestore }, ownProps) => {
     eventsLoading: async.loading,
     auth: firebase.auth,
     photos: firestore.ordered.photos,
-    requesting: firestore.status.requesting
+    requesting: firestore.status.requesting,
+    following: firestore.ordered.following
   };
 };
 
 export default compose(
   connect(
     mapStateToProps,
-    { getUserEvents }
+    { getUserEvents, followUser, unfollowUser }
   ),
   firestoreConnect((auth, userUid, match) =>
     userDetailedQuery(auth, userUid, match)

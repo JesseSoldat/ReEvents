@@ -29,6 +29,7 @@ class EventForm extends Component {
     scriptLoaded: false
   };
 
+  // Start Google Places
   handleScriptLoaded = () => {
     this.setState({ scriptLoaded: true });
   };
@@ -62,6 +63,8 @@ class EventForm extends Component {
     };
     return searchOptions;
   };
+
+  // End Google Places
 
   onFormSubmit = values => {
     const formValues = {
@@ -123,7 +126,7 @@ class EventForm extends Component {
                     component={PlaceInput}
                     searchOptions={{ types: ["(cities)"] }}
                     placeholder="Event city"
-                    input={this.state.city}
+                    place={event.city}
                     onSelect={this.handleCitySelect}
                   />
                   <Field
@@ -132,6 +135,7 @@ class EventForm extends Component {
                     component={PlaceInput}
                     searchOptions={this.updateSearchOptions()}
                     placeholder="Event venue"
+                    place={event.venue}
                     onSelect={this.handleVenueSelect}
                   />
                 </div>
@@ -194,11 +198,17 @@ const validate = combineValidators({
 });
 
 const mapStateToProps = ({ firestore, firebase, async }, ownProps) => {
-  let event = {};
+  let event = {
+    city: "",
+    venue: ""
+  };
 
-  if (firestore.ordered.events && firestore.ordered.events[0]) {
-    event = firestore.ordered.events[0];
+  if (ownProps.formName === "editEvent") {
+    if (firestore.ordered.events && firestore.ordered.events[0]) {
+      event = firestore.ordered.events[0];
+    }
   }
+
   return {
     initialValues: event,
     event,

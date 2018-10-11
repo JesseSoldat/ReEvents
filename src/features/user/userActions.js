@@ -289,6 +289,7 @@ export const deletePhoto = photo => async (
   const user = firebase.auth().currentUser;
   try {
     await firebase.deleteFile(`${user.uid}/user_images/${photo.name}`);
+
     await firestore.delete({
       collection: "users",
       doc: user.uid,
@@ -297,5 +298,49 @@ export const deletePhoto = photo => async (
   } catch (error) {
     console.log(error);
     throw new Error("Problem deleting the photo");
+  }
+};
+
+export const followUser = userToFollow => async (
+  dispatch,
+  getState,
+  { getFirestore }
+) => {
+  const firestore = getFirestore();
+  const user = firestore.auth().currentUser;
+  const following = {
+    photoURL: userToFollow.photoURL || "/assets/user.png",
+    city: userToFollow.city || "unknown city",
+    displayName: userToFollow.displayName
+  };
+  try {
+    await firestore.set(
+      {
+        collection: "users",
+        doc: user.uid,
+        subcollections: [{ collection: "following", doc: userToFollow.id }]
+      },
+      following
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const unfollowUser = userToUnfollow => async (
+  dispatch,
+  getState,
+  { getFirestore }
+) => {
+  const firestore = getFirestore();
+  const user = firestore.auth().currentUser;
+  try {
+    await firestore.delete({
+      collection: "users",
+      doc: user.uid,
+      subcollections: [{ collection: "following", doc: userToUnfollow.id }]
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

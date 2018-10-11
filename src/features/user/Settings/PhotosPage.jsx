@@ -17,7 +17,7 @@ import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 // Actions
-import { uploadProfileImage, setMainPhoto } from "../userActions";
+import { uploadProfileImage, setMainPhoto, deletePhoto } from "../userActions";
 
 class PhotosPage extends Component {
   state = {
@@ -50,6 +50,7 @@ class PhotosPage extends Component {
 
   handlePhotoDelete = photo => async () => {
     try {
+      await this.props.deletePhoto(photo);
     } catch (error) {
       toastr.error("Oops", error.message);
     }
@@ -211,7 +212,7 @@ const mapStateToProps = ({ firebase, firestore, async }) => ({
 export default compose(
   connect(
     mapStateToProps,
-    { uploadProfileImage, setMainPhoto }
+    { uploadProfileImage, setMainPhoto, deletePhoto }
   ),
   firestoreConnect(auth => query(auth))
 )(PhotosPage);

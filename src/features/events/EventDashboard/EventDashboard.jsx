@@ -15,7 +15,8 @@ class EventDashboard extends Component {
     loadingInitial: true,
     loadedEvents: [],
     moreEvents: false,
-    noEvents: true
+    noEvents: true,
+    contextRef: {}
   };
 
   async componentDidMount() {
@@ -77,6 +78,8 @@ class EventDashboard extends Component {
     }
   };
 
+  handleContextRef = contextRef => this.setState({ contextRef });
+
   render() {
     const { loading, activities } = this.props;
     const { noEvents, loadedEvents, moreEvents } = this.state;
@@ -91,7 +94,7 @@ class EventDashboard extends Component {
               <h3>No Events Available</h3>
             </div>
           )}
-          <div>
+          <div ref={this.handleContextRef}>
             <EventList
               loading={loading}
               events={loadedEvents}

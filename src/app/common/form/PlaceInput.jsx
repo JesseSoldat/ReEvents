@@ -5,14 +5,12 @@ import { Form, Label, Segment } from "semantic-ui-react";
 
 class PlacesInput extends Component {
   state = {
-    address: "",
     scriptLoaded: false
   };
 
   handleScriptLoaded = () => this.setState({ scriptLoaded: true });
 
   handleChange = address => {
-    this.setState({ address });
     this.props.onSelect(address);
   };
 
@@ -35,9 +33,13 @@ class PlacesInput extends Component {
 
   render() {
     const {
+      input,
       searchOptions,
       meta: { touched, error }
     } = this.props;
+
+    const { value } = input;
+
     return (
       <Form.Field error={touched && !!error}>
         <Script
@@ -46,7 +48,7 @@ class PlacesInput extends Component {
         />
         {this.state.scriptLoaded && (
           <PlacesAutocomplete
-            value={this.state.address}
+            value={value}
             searchOptions={searchOptions}
             onChange={this.handleChange}
             onSelect={this.handleChange}
