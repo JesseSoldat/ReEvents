@@ -10,6 +10,11 @@ import {
 } from "../async/asyncActions";
 // Types
 export const FETCH_EVENTS = "FETCH_EVENTS";
+export const RESET_EVENTS = "RESET_EVENTS";
+
+export const resetEvents = () => ({
+  type: RESET_EVENTS
+});
 
 export const createEvent = event => async (
   dispatch,

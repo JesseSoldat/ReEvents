@@ -72,7 +72,7 @@ class EventDetailsPage extends Component {
     const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
     // console.log("requesting", requesting);
-    console.log("isGoing", isGoing);
+    // console.log("isGoing", isGoing);
 
     const authenticated = auth.isLoaded && !auth.isEmpty;
 

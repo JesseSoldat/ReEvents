@@ -1,4 +1,4 @@
-import { FETCH_EVENTS } from "./eventActions";
+import { FETCH_EVENTS, RESET_EVENTS } from "./eventActions";
 
 const initialState = [];
 
@@ -7,6 +7,9 @@ export default (state = initialState, action) => {
   switch (type) {
     case FETCH_EVENTS:
       return [...payload.events];
+
+    case RESET_EVENTS:
+      return [];
 
     default:
       return [...state];

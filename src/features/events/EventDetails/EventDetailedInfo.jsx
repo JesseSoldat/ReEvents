@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Segment, Grid, Icon, Button } from "semantic-ui-react";
 import format from "date-fns/format";
 // Custom Components
-// import EventDetailedMap from './EventDetailedMap'
+import EventDetailedMap from "./EventDetailedMap";
 
 class EventDetailedInfo extends Component {
   state = {
@@ -70,8 +70,12 @@ class EventDetailedInfo extends Component {
             </Grid.Column>
           </Grid>
         </Segment>
-        {/* {this.state.showMap &&
-        <EventDetailedMap lat={event.venueLatLng.lat} lng={event.venueLatLng.lng}/>} */}
+        {this.state.showMap && (
+          <EventDetailedMap
+            lat={event.venueLatLng.lat}
+            lng={event.venueLatLng.lng}
+          />
+        )}
       </Segment.Group>
     );
   }

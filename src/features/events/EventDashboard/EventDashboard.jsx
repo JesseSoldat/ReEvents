@@ -8,7 +8,7 @@ import LoadingComponent from "../../../app/layout/Loading";
 import EventList from "../EventList/EventList";
 import EventActivity from "../EventActivity/EventActivity";
 // Actions
-import { getEventsForDashboard } from "../eventActions";
+import { getEventsForDashboard, resetEvents } from "../eventActions";
 
 class EventDashboard extends Component {
   state = {
@@ -62,7 +62,9 @@ class EventDashboard extends Component {
     }
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.props.resetEvents();
+  }
 
   getNextEvents = async () => {
     const { events } = this.props;
@@ -133,5 +135,5 @@ const mapStateToProps = ({ async, events, firestore }) => ({
 
 export default connect(
   mapStateToProps,
-  { getEventsForDashboard }
+  { getEventsForDashboard, resetEvents }
 )(firestoreConnect(query)(EventDashboard));
