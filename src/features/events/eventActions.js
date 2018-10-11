@@ -145,7 +145,7 @@ export const getEvent = eventId => async (
     // console.log("ID", id);
 
     event.id = id;
-    console.log("getEvent Action", event);
+    // console.log("getEvent Action", event);
 
     dispatch({ type: FETCH_EVENT, payload: { event } });
     dispatch(asyncActionFinish());

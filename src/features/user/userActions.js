@@ -9,6 +9,8 @@ import {
 } from "../async/asyncActions";
 // Types
 import { FETCH_EVENTS } from "../events/eventActions";
+export const GOING_TO_EVENT = "GOING_TO_EVENT";
+export const CANCEL_GOING_TO_EVENT = "CANCEL_GOING_TO_EVENT";
 
 export const goingToEvent = event => async (
   dispatch,
@@ -26,7 +28,8 @@ export const goingToEvent = event => async (
     joinDate: Date.now(),
     photoURL: profile.photoURL || "/assets/user.png",
     displayName: profile.displayName,
-    host: false
+    host: false,
+    id: user.uid
   };
 
   try {
@@ -47,6 +50,8 @@ export const goingToEvent = event => async (
         host: false
       });
     });
+
+    dispatch({ type: GOING_TO_EVENT, payload: { attendee } });
     dispatch(asyncActionFinish());
     toastr.success("Success", "You have signed up to the event");
   } catch (err) {
@@ -61,18 +66,24 @@ export const cancelGoingToEvent = event => async (
   getState,
   { getFirestore, getFirebase }
 ) => {
+  dispatch(asyncActionStart());
   const firestore = getFirestore();
   const firebase = getFirebase();
   const user = firebase.auth().currentUser;
+  const uid = user.uid;
 
   try {
     await firestore.update(`events/${event.id}`, {
-      [`attendees.${user.uid}`]: firestore.FieldValue.delete()
+      [`attendees.${uid}`]: firestore.FieldValue.delete()
     });
     await firestore.delete(`event_attendee/${event.id}_${user.uid}`);
+
+    dispatch({ type: CANCEL_GOING_TO_EVENT, payload: { uid } });
+    dispatch(asyncActionFinish());
     toastr.success("Success", "You have removed yourself from the event");
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
+    dispatch(asyncActionError());
     toastr.error("Oops", "something went wrong");
   }
 };

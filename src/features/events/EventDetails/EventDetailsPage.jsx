@@ -46,7 +46,6 @@ class EventDetailsPage extends Component {
     }
 
     const event = events[0];
-    console.log("EVENTS", events);
 
     const attendees =
       event &&
@@ -58,8 +57,6 @@ class EventDetailsPage extends Component {
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
 
     const isHost = event.hostUid === auth.uid;
-
-    // console.log("isGoing", isGoing);
 
     const authenticated = auth.isLoaded && !auth.isEmpty;
 
