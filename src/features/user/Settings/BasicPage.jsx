@@ -19,6 +19,7 @@ class BasicPage extends Component {
 
   render() {
     const { pristine, submitting, handleSubmit, updateProfile } = this.props;
+
     return (
       <Segment>
         <Header dividing size="large" content="Basics" />
@@ -66,7 +67,6 @@ class BasicPage extends Component {
             placeholder="Home Town"
             searchOptions={{ types: ["(cities)"] }}
             label="Home Town"
-            input={this.state.city}
             onSelect={this.handleCitySelect}
             component={PlaceInput}
             width={8}

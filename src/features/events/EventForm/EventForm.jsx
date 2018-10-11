@@ -22,6 +22,10 @@ import DateInput from "../../../app/common/form/DateInput";
 // Data
 import category from "./category";
 
+import { googleMapsApiKey } from "../../../app/config/googleKey";
+
+const url = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places`;
+
 class EventForm extends Component {
   state = {
     cityLatLng: {},
@@ -89,10 +93,7 @@ class EventForm extends Component {
     } = this.props;
     return (
       <Grid>
-        <Script
-          url="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7V7ExJydkww--H26Wtuo5NXrWmb9VEhI&libraries=places"
-          onLoad={this.handleScriptLoaded}
-        />
+        <Script url={url} onLoad={this.handleScriptLoaded} />
         <Grid.Column width={10}>
           <Segment>
             <Header sub color="teal" content="Event Details" />
@@ -126,7 +127,6 @@ class EventForm extends Component {
                     component={PlaceInput}
                     searchOptions={{ types: ["(cities)"] }}
                     placeholder="Event city"
-                    place={event.city}
                     onSelect={this.handleCitySelect}
                   />
                   <Field
@@ -135,7 +135,6 @@ class EventForm extends Component {
                     component={PlaceInput}
                     searchOptions={this.updateSearchOptions()}
                     placeholder="Event venue"
-                    place={event.venue}
                     onSelect={this.handleVenueSelect}
                   />
                 </div>

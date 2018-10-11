@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import PlacesAutocomplete from "react-places-autocomplete";
 import Script from "react-load-script";
 import { Form, Label, Segment } from "semantic-ui-react";
+import { googleMapsApiKey } from "../../config/googleKey";
+
+const url = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places`;
 
 class PlacesInput extends Component {
   state = {
@@ -38,14 +41,13 @@ class PlacesInput extends Component {
       meta: { touched, error }
     } = this.props;
 
+    // console.log("Places", input);
+
     const { value } = input;
 
     return (
       <Form.Field error={touched && !!error}>
-        <Script
-          url="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7V7ExJydkww--H26Wtuo5NXrWmb9VEhI&libraries=places"
-          onLoad={this.handleScriptLoaded}
-        />
+        <Script url={url} onLoad={this.handleScriptLoaded} />
         {this.state.scriptLoaded && (
           <PlacesAutocomplete
             value={value}

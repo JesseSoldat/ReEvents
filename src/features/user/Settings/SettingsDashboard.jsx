@@ -54,10 +54,21 @@ const SettingsDashboard = ({
   );
 };
 
-const mapStateToProps = ({ firebase }) => ({
-  providerId: firebase.auth.providerData[0].providerId,
-  user: firebase.profile
-});
+const mapStateToProps = ({ firebase }) => {
+  let user = {
+    city: ""
+  };
+
+  if (firebase.profile) {
+    // console.log("Profile", firebase.profile);
+    user = firebase.profile;
+  }
+
+  return {
+    providerId: firebase.auth.providerData[0].providerId,
+    user
+  };
+};
 
 export default connect(
   mapStateToProps,
