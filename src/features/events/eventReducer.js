@@ -1,4 +1,9 @@
-import { FETCH_EVENTS, RESET_EVENTS } from "./eventActions";
+import {
+  FETCH_EVENTS,
+  FETCH_EVENT,
+  RESET_EVENTS,
+  RESET_EVENT
+} from "./eventActions";
 
 const initialState = [];
 
@@ -9,6 +14,12 @@ export default (state = initialState, action) => {
       return [...payload.events];
 
     case RESET_EVENTS:
+      return [];
+
+    case FETCH_EVENT:
+      return [payload.event];
+
+    case RESET_EVENT:
       return [];
 
     default:

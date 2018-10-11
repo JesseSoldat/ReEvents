@@ -78,7 +78,6 @@ exports.cancelActivity = functions.firestore
 exports.userFollowing = functions.firestore
   .document("users/{followerUid}/following/{followingUid}")
   .onCreate((event, context) => {
-    console.log("v1");
     const followerUid = context.params.followerUid;
     const followingUid = context.params.followingUid;
 

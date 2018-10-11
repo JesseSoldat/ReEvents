@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Grid } from "semantic-ui-react";
-import { toastr } from "react-redux-toastr";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { withFirestore, firebaseConnect, isEmpty } from "react-redux-firebase";
 // Common Components
 import LoadingComponent from "../../../app/layout/Loading";
 // Custom Components
@@ -13,6 +11,7 @@ import EventDetailedSidebar from "./EventDetailedSidebar";
 // Actions
 import { openModal } from "../../modals/modalActions";
 import { goingToEvent, cancelGoingToEvent } from "../../user/userActions";
+import { getEvent, resetEvent } from "../eventActions";
 // Utils
 import { objectToArray } from "../../../app/common/util/helpers";
 
@@ -21,47 +20,33 @@ class EventDetailsPage extends Component {
     initialLoading: true
   };
 
-  async componentDidMount() {
-    const { firestore, match } = this.props;
-    try {
-      const event = await firestore.get(`events/${match.params.id}`);
-
-      if (!event.exists) {
-        toastr.error("Not found", "This is not the event you are looking for");
-        return this.props.history.push("/events");
-      }
-
-      await firestore.setListener(`events/${match.params.id}`);
-
-      this.setState({
-        initialLoading: false
-      });
-    } catch (err) {
-      console.log(err);
-    }
+  componentDidMount() {
+    const { getEvent, match } = this.props;
+    getEvent(match.params.id);
   }
 
   async componentWillUnmount() {
-    const { firestore, match } = this.props;
-    await firestore.unsetListener(`events/${match.params.id}`);
+    this.props.resetEvent();
   }
 
   render() {
     const {
-      match,
       loading,
-      requesting,
-      event,
+      events,
       auth,
       openModal,
       goingToEvent,
       cancelGoingToEvent
     } = this.props;
 
-    const loadingEvent = requesting[`events/${match.params.id}`];
+    if (loading) return <LoadingComponent inverted={true} />;
 
-    if (loadingEvent || this.state.initialLoading)
-      return <LoadingComponent inverted={true} />;
+    if (events && events.length === 0) {
+      return <div>There is no event details</div>;
+    }
+
+    const event = events[0];
+    console.log("EVENTS", events);
 
     const attendees =
       event &&
@@ -69,9 +54,11 @@ class EventDetailsPage extends Component {
       objectToArray(event.attendees).sort(function(a, b) {
         return a.joinDate - b.joinDate;
       });
-    const isHost = event.hostUid === auth.uid;
+
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
-    // console.log("requesting", requesting);
+
+    const isHost = event.hostUid === auth.uid;
+
     // console.log("isGoing", isGoing);
 
     const authenticated = auth.isLoaded && !auth.isEmpty;
@@ -99,26 +86,17 @@ class EventDetailsPage extends Component {
   }
 }
 
-const mapStateToProps = ({ firestore, firebase, async }) => {
-  let event = {};
-
-  if (firestore.ordered.events && firestore.ordered.events[0]) {
-    event = firestore.ordered.events[0];
-    // console.log("event", event);
-  }
-
+const mapStateToProps = ({ events, firebase, async }) => {
   return {
-    requesting: firestore.status.requesting,
-    event,
+    events: events,
     loading: async.loading,
     auth: firebase.auth
   };
 };
 
 export default compose(
-  withFirestore,
   connect(
     mapStateToProps,
-    { openModal, goingToEvent, cancelGoingToEvent }
-  )
-)(EventDetailsPage);
+    { openModal, goingToEvent, cancelGoingToEvent, getEvent, resetEvent }
+  )(EventDetailsPage)
+);

@@ -11,6 +11,8 @@ import {
 // Types
 export const FETCH_EVENTS = "FETCH_EVENTS";
 export const RESET_EVENTS = "RESET_EVENTS";
+export const FETCH_EVENT = "FETCH_EVENT";
+export const RESET_EVENT = "RESET_EVENT";
 
 export const resetEvents = () => ({
   type: RESET_EVENTS
@@ -112,6 +114,41 @@ export const getEventsForDashboard = lastEvent => async (
     dispatch({ type: FETCH_EVENTS, payload: { events } });
     dispatch(asyncActionFinish());
     return querySnap;
+  } catch (err) {
+    console.log(err);
+    dispatch(asyncActionError());
+  }
+};
+
+export const resetEvent = () => ({
+  type: RESET_EVENT
+});
+
+export const getEvent = eventId => async (
+  dispatch,
+  getState,
+  { getFirestore }
+) => {
+  dispatch(asyncActionStart());
+  const firestore = firebase.firestore();
+
+  // console.log("eventId", eventId);
+
+  const eventsRef = firestore.collection("events").doc(eventId);
+
+  try {
+    const eventSnapshot = await eventsRef.get();
+
+    const event = eventSnapshot.data();
+
+    const id = eventSnapshot.id;
+    // console.log("ID", id);
+
+    event.id = id;
+    console.log("getEvent Action", event);
+
+    dispatch({ type: FETCH_EVENT, payload: { event } });
+    dispatch(asyncActionFinish());
   } catch (err) {
     console.log(err);
     dispatch(asyncActionError());
